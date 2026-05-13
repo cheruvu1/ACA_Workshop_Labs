@@ -163,4 +163,4 @@ az acr repository list --name $ACR_NAME -o table
 
 ### 3.4 Verify in Azure Portal
 
-Log in to the [Azure Portal](https://portal.azure.com) and navigate to your Container Registry to confirm the image was pushed successfully.
+Log in to the [Azure Portal](https://portal.azure.us) and navigate to your Container Registry to confirm the image was pushed successfully.
