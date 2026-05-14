@@ -1,0 +1,1 @@
+[{"ContainerToolsException.Message":"The current user is not in the 'docker-users' group. Add yourself to the 'docker-users' group and then log out and back in to Windows.","ContainerToolsException.ErrorCode":"CTC1010","ContainerToolsException.StackTrace":"","ContainerToolsException.HResult":"-2146233088"}]

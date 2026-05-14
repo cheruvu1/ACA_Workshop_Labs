@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "K2M5K0rjh+4=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\scheruvu\\source\\repos\\ASP-Net-Core-WebApplication\\ASP-Net-Core-WebApplication\\ASP-Net-Core-WebApplication.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\scheruvu\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.23.0\\microsoft.visualstudio.azure.containers.tools.targets.1.23.0.nupkg.sha512"
+  ],
+  "logs": []
+}

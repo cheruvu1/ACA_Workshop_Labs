@@ -1,0 +1,9 @@
+CorrelationId: 39c7489b-9fa7-4240-af78-9344493cb1fc
+UTC DateTime: 05/14/2026 02:52:45
+
+The following files/folders have not been downloaded
+0. ASP-Net-Core-WebApplication/ASP-Net-Core-WebApplication/obj/Debug/net10.0/ASP-Net-Core-WebApplication.csproj.BuildWithSkipAnalyzers
+1. ASP-Net-Core-WebApplication/ASP-Net-Core-WebApplication/obj/Debug/net10.0/ASP-Net-Core-WebApplication.MvcApplicationPartsAssemblyInfo.cache
+2. ASP-Net-Core-WebApplication/ASP-Net-Core-WebApplication/obj/Debug/net10.0/staticwebassets.references.upToDateCheck.txt
+3. ASP-Net-Core-WebApplication/ASP-Net-Core-WebApplication/obj/Debug/net10.0/staticwebassets.removed.txt
+4. ASP-Net-Core-WebApplication/ASP-Net-Core-WebApplication/obj/Debug/net10.0/swae.build.ex.cache
