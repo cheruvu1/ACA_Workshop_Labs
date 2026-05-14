@@ -278,7 +278,7 @@ docker push cheruvu007/mycontainerapp:1.0-amd64
 ---
 
 
-# 8. Other Docker commands (CLI Chat Sheet)
+# 8. Other Docker commands (CLI Cheat Sheet)
 
 # INSTALLATION
 
