@@ -84,7 +84,7 @@ az containerapp create \
   --name secrets-demo-app \
   --resource-group $RESOURCE_GROUP \
   --environment $environment \
-  --image kamalrathnayake/secretsdemo:latest \
+  --image myacrlab16284.azurecr.us/secretsdemo:latest \
   --target-port 80 \
   --ingress external \
   --secrets key1=123456 key2="Another secret"

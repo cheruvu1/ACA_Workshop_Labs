@@ -1,10 +1,21 @@
 # Module 2 / Day 2 Lab: Azure Container Apps
 
+## Azure Container Apps Demo Topics
+
+1. Deploy the Container to Azure Container Apps
+2. Explore Image Deployment Strategies
+3. Explore Hosting Options (Ingress Settings)
+4. Advanced Ingress — Traffic Splitting (Blue/Green & Canary Deployments)
+5. Advanced Networking — IP Restrictions
+6. Scalability in Container Apps (replicas)
+7. Environment Variables
+8. Azure Key Vault Integration
+
 ---
 
-## Section 4: Deploy the Container to Azure Container Apps
+## 1. Deploy the Container to Azure Container Apps
 
-### 4.1 Create the Container App
+### 1.1 Create the Container App
 
 There are two ways to create an Azure Container App. Choose one option below.
 
@@ -31,7 +42,7 @@ az containerapp create \
 
 Navigate to the [Azure Portal](https://portal.azure.com) and use the Container Apps creation wizard.
 
-### 4.2 Verify the Deployment
+### 1.2 Verify the Deployment
 
 ```bash
 az containerapp show \
@@ -43,15 +54,15 @@ az containerapp show \
 
 > **Example output:** `my-container-app.victoriousbush-05a7d3b0.usgovvirginia.azurecontainerapps.us`
 
-### 4.3 Additional Deployments
+### 1.3 Additional Deployments
 
 Explore more Container Apps deployment patterns in the [workshop guide](https://moaw.dev/workshop/?src=gh:yelghali/azure-container-apps-lab-beginners/main/docs/#3-push-the-image-to-azure-container-registry).
 
 ---
 
-## Section 5: Explore Image Deployment Strategies
+## 2. Explore Image Deployment Strategies
 
-### 5.1 Using Registry Credentials (Username/Password)
+### 2.1 Using Registry Credentials (Username/Password)
 
 This approach is quick to set up but stores credentials as secrets. Suitable for dev/test environments.
 
@@ -72,7 +83,7 @@ az containerapp create \
 
 ---
 
-### 5.2 Using Managed Identity ⭐ (Recommended for Production)
+## 2.2 Using Managed Identity ⭐ (Recommended for Production)
 
 Managed Identity eliminates the need to store credentials entirely.
 
@@ -126,6 +137,7 @@ az containerapp registry set \
 ```
 
 > **Expected output:**
+>
 > ```json
 > [
 >   {
@@ -139,7 +151,7 @@ az containerapp registry set \
 
 ---
 
-### 5.3 Using a Public Registry (No Auth — e.g., DockerHub)
+### 2.3 Using a Public Registry (No Auth — e.g., DockerHub)
 
 Use this approach when pushing to a public container registry.
 
@@ -164,7 +176,7 @@ docker push cheruvu007/mycontainerapp:1.0-amd64
 
 ---
 
-## Section 6: Explore Hosting Options (Ingress Settings)
+## 3. Explore Hosting Options (Ingress Settings)
 
 Azure Container Apps supports three ingress modes:
 
@@ -174,7 +186,7 @@ Azure Container Apps supports three ingress modes:
 | **Internal** | Within the ACA environment / VNet only | Microservices, private backends |
 | **None** | No endpoint | Background jobs, event-driven processing |
 
-### 6.1 Create an App with External Ingress (Public)
+### 3.1 Create an App with External Ingress (Public)
 
 ```bash
 APP_NAME_EXTERNAL="container-app-external"
@@ -188,7 +200,7 @@ az containerapp create \
   --ingress external
 ```
 
-### 6.2 Create an App with Internal Ingress
+### 3.2 Create an App with Internal Ingress
 
 ```bash
 APP_NAME_INTERNAL="container-app-internal"
@@ -227,7 +239,7 @@ az containerapp exec \
 curl https://container-app-internal.internal.victoriousbush-05a7d3b0.usgovvirginia.azurecontainerapps.us
 ```
 
-### 6.3 Create an App with No Ingress
+### 3.3 Create an App with No Ingress
 
 ```bash
 APP_NAME_NOINGRESS="container-app-noingress"
@@ -248,12 +260,12 @@ az containerapp ingress disable \
 
 ---
 
-## Section 7: Advanced Ingress — Traffic Splitting (Blue/Green & Canary Deployments)
+## 4. Advanced Ingress — Traffic Splitting (Blue/Green & Canary Deployments)
 
 **Blue-Green:** Route all traffic to v1 (blue), deploy v2 (green), then switch 100% at once.  
 **Canary:** Gradually shift a small percentage of traffic to v2 while monitoring stability.
 
-### 7.1 Build and Push Version 2
+### 4.1 Build and Push Version 2
 
 ```bash
 # Build v2
@@ -261,6 +273,7 @@ docker build --platform=linux/amd64 -t mycontainerapp:2.0-amd64 .
 
 # Test locally
 docker run -d -p 8080:80 mycontainerapp:2.0-amd64
+
 # Open http://localhost:8080 to verify
 
 # Stop the local container when done
@@ -278,7 +291,7 @@ az acr repository list --name $ACR_NAME -o table
 
 > Verify the new image appears in the **Azure Portal** under your Container Registry.
 
-### 7.2 Enable Multiple Revisions Mode
+### 4.2 Enable Multiple Revisions Mode
 
 To run both versions simultaneously, switch to multiple revision mode:
 
@@ -291,7 +304,7 @@ az containerapp revision set-mode \
 
 > In the portal: **Application > Revisions and Replicas > Choose Revision Mode**
 
-### 7.3 Deploy the New Revision (v2)
+### 4.3 Deploy the New Revision (v2)
 
 ```bash
 az containerapp update \
@@ -308,7 +321,7 @@ This creates a new revision running v2 while keeping v1 active.
 az containerapp revision list -n $APP_NAME -g $RESOURCE_GROUP -o table
 ```
 
-### 7.4 Split Traffic Between Revisions
+### 4.4 Split Traffic Between Revisions
 
 Replace the revision names below with actual values from the list above:
 
@@ -326,7 +339,7 @@ az containerapp ingress traffic set \
 
 ---
 
-## Section 8: Advanced Networking — IP Restrictions
+## 5. Advanced Networking — IP Restrictions
 
 IP restrictions let you control which clients can reach your container app's public endpoint.
 
@@ -337,7 +350,7 @@ IP restrictions let you control which clients can reach your container app's pub
 
 > **Important:** You cannot mix Allow and Deny rules on the same app — choose one mode.
 
-### 8.1 Add an IP Allow Rule
+### 5.1 Add an IP Allow Rule
 
 ```bash
 # Get your current public IP
@@ -360,11 +373,11 @@ az containerapp ingress access-restriction list \
   -o table
 ```
 
-### 8.2 Test the IP Restriction
+### 5.2 Test the IP Restriction
 
 Access the app from a different network or device to confirm it is blocked.
 
-### 8.3 Remove an IP Allow Rule
+### 5.3 Remove an IP Allow Rule
 
 ```bash
 az containerapp ingress access-restriction remove \
@@ -373,7 +386,7 @@ az containerapp ingress access-restriction remove \
   --rule-name "AllowMyIP"
 ```
 
-### 8.4 Add an IP Deny Rule
+### 5.4 Add an IP Deny Rule
 
 ```bash
 az containerapp ingress access-restriction set \
@@ -388,19 +401,86 @@ az containerapp ingress access-restriction set \
 > To remove via portal: **Networking > Ingress > Source Restrictions**
 
 ---
+# 6. Scalability in Container Apps
 
-## Section 9: Replicas — Application Scaling (Availability)
+## Core Concepts
 
-> _Content coming soon — covers horizontal scaling via replica configuration._
+- **Horizontal Scaling** — Container apps scale out by creating new on-demand instances called **replicas**
+- **Default State** — When you first create a container app, the scale rule is set to **zero**
+- **Cost** — No charges are incurred when an application scales to zero
+
+## Types of Scaling Rules
+
+| Type | Description |
+|---|---|
+| **HTTP Traffic** | Scales based on the number of concurrent HTTP requests to your revision |
+| **Event Driven** | Event-based triggers such as messages in an Azure Service Bus |
+| **CPU / Memory** | Scales based on the amount of CPU or memory consumed by a replica |
 
 ---
 
-## Section 10: Environment Variables
+## Lab: HTTP Traffic Based Scale Out
 
-Review and manage environment variables in the portal:
+### Step 1 — Configure Scaling in Azure Portal
 
-**Portal path:** Container App > **Application > Containers > Environment Variables**
+1. Login to Azure Portal → **replicas-demo** → Application → **Scale**
+2. Set **Min replicas** = `0`
+3. Set **Max replicas** = `5`
+4. Click **+ Add** under Scale Rules and configure:
+   - **Rule name:** `http-rule`
+   - **Type:** HTTP scaling
+   - **Concurrent requests:** `20`
+5. Save as a new revision
 
-### Azure Key Vault Integration
+---
+
+### Step 2 — Install Apache JMeter (Mac)
+
+| Action | Command |
+|---|---|
+| Install | `brew install jmeter` |
+| Reinstall | `brew reinstall jmeter` |
+| Open | `open /opt/homebrew/Cellar/jmeter/5.6.3/bin/jmeter` |
+
+---
+
+### Step 3 — Configure JMeter
+
+1. Right-click **Test Plan** → Add → **Thread Group**
+2. Right-click **Thread Group** → Add → Sampler → **HTTP Request**
+3. Right-click **Thread Group** → Add → Listener → **View Results Tree**
+4. Configure the HTTP Request:
+   - **Protocol:** `https`
+   - **Server Name or IP:** `container-app-external.victoriousbush-05a7d3b0.usgovvirginia.azurecontainerapps.us`
+5. Set **Thread Group** → Number of Threads (Users): `400`
+
+---
+
+### Step 4 — Test & Monitor
+
+- Run the test via **View Results Tree**
+- In Azure Portal: **Monitoring** → **Log Stream** → Console → Refresh → use **Replica Drop Down** to review active replicas
+- Review **Revisions and Replicas** in the portal to confirm scaling behavior
+ 
+---
+
+# 7. Environment Variables in Container Apps
+
+## Review and Manage Environment Variables
+
+### Portal Path
+
+**Container App** → Application → **Containers** → Edit and Deploy → Select the Container Image → **Environment Variables** → **+ Add**
+
+### Steps
+
+1. Navigate to your **Container App** in the Azure Portal
+2. Go to **Application** → **Containers**
+3. Click **Edit and Deploy**
+4. Select your **Container Image**
+5. Click **Environment Variables**
+6. Click **+ Add** to add a new environment variable
+
+### 8. Azure Key Vault Integration
 
 > _Content coming soon — covers referencing Key Vault secrets as environment variables._

@@ -53,8 +53,17 @@ az extension add --name containerapp --upgrade
 ### 1.1 Login and Provider Registration
 
 ```bash
-# Log in to Azure CLI (opens a browser for authentication)
+
+# 1. Set the cloud to Azure Government
+az cloud set --name AzureUSGovernment
+
+# 2. Sign in to your Azure Government account
 az login
+
+# 3. (Optional) Verify the active cloud
+az cloud list --output table
+az cloud show
+**Commercial Cloud:** az cloud set --name AzureCloud
 
 # Add the Container Apps extension
 az extension add --name containerapp --upgrade
@@ -214,6 +223,7 @@ docker stop 1d7ccca213b0
 ### 6.1 Log In to ACR
 
 ```bash
+ACR_NAME=myacrlab16284
 az acr login --name $ACR_NAME
 ```
 
@@ -221,6 +231,8 @@ az acr login --name $ACR_NAME
 
 ```bash
 # Get the ACR login server URL
+ACR_NAME=myacrlab16284
+
 ACR_LOGIN_SERVER=$(az acr show -n $ACR_NAME --query "loginServer" -o tsv)
 
 # Standard tag
