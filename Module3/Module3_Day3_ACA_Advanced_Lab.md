@@ -2,7 +2,17 @@
 
 ---
 
-## Section 1: Bring Your Own Virtual Network (VNET)
+## Azure Container Apps Demo Topics
+
+1. Bring Your Own Virtual Network (VNET)
+2. Secrets Management
+3. Azure Key Vault Integration
+4. Authentication and Authorization
+5. Logging and Observability
+
+---
+
+## 1. Bring Your Own Virtual Network (VNET)
 
 ### Overview
 
@@ -41,7 +51,7 @@ After creation:
 https://vnet-demo-aca.internal.agreeablebay-776576db.usgovvirginia.azurecontainerapps.us
 ```
 
-3. Go to **Resource Groups > Container Apps Environment > VNetDemo-managedEnvironment** and copy the static IP (e.g., `10.0.2.68`)
+1. Go to **Resource Groups > Container Apps Environment > VNetDemo-managedEnvironment** and copy the static IP (e.g., `10.0.2.68`)
 
 ### Step 3: Create a Test VM in the Same VNet
 
@@ -59,7 +69,7 @@ After the VM is created, RDP into it and paste the internal ingress URL into the
 
 ---
 
-## Section 2: Secrets Management
+## 2. Secrets Management
 
 ### Comparison: Environment Variables vs. Secrets vs. Azure Key Vault
 
@@ -111,8 +121,8 @@ az containerapp revision restart \
   --revision secrets-demo-app--v2
 ```
 
-7. Test the app URL again — secrets should now be visible
-8. **Monitoring > Console > run `printenv`** — review `KEY1` and `KEY2`
+1. Test the app URL again — secrets should now be visible
+2. **Monitoring > Console > run `printenv`** — review `KEY1` and `KEY2`
 
 **Optional cleanup:**
 
@@ -120,9 +130,187 @@ az containerapp revision restart \
 az group delete --resource-group $RESOURCE_GROUP --yes
 ```
 
+ ----
+ 
+ # 3. Azure Key Vault Integration
+
+> Covers referencing Key Vault secrets as environment variables in Azure Container Apps.
+
 ---
 
-## Section 3: Authentication and Authorization
+## Step 1 — Create the Secrets Demo ACA Application
+
+### Set Environment Variables
+
+```bash
+environment="my-containerapps-env"
+RESOURCE_GROUP="aca_resourcegroup"
+ACR_NAME="myacrlab16284.azurecr.us"
+ACR_USER="myacrlab16284"
+ACR_PASS="7YWoBJ6E0RBllgDCK2yl5F81Rrmro5xsj5tCQqUO0m7asCCRX0zaJQQJ99CEAAhseKSEqg7NAAACAZCRIOB2"
+```
+
+### Login to Azure and ACR
+
+```bash
+az login
+az acr login --name $ACR_NAME
+az acr login --name myacrlab16284.azurecr.us
+```
+
+### Create the Container App
+
+```bash
+az containerapp create \
+  --name keyvault-demo-app \
+  --resource-group $RESOURCE_GROUP \
+  --environment $environment \
+  --image myacrlab16284.azurecr.us/secretsdemo:latest \
+  --target-port 80 \
+  --ingress external \
+  --registry-server "$ACR_NAME" \
+  --registry-username $ACR_USER \
+  --registry-password $ACR_PASS
+```
+
+---
+
+## Step 2 — Create an Azure Key Vault
+
+1. Go to **Azure Portal** → Search **Key vaults** in the top search bar
+2. Click **+ Create** and configure:
+   - **Name:** `secrets-demo-keyvault`
+3. Click **Create**
+
+---
+
+## Step 3 — Add Key 1 in ACA Secrets
+
+1. Go to **Azure Portal** → **ACA** → **keyvault-demo-app** → Security → **Secrets** → **+ Add**
+2. Configure:
+   - **Key:** `key1`
+   - **Value:** `ThisIsaACASecret`
+3. Click **Add**
+
+---
+
+## Step 4 — Add Key 2 in Azure Key Vault
+
+### Assign Permissions to Yourself First
+
+> **Note:** First time you open Key Vault Secrets, you will see:
+> *"You are unauthorized to view these contents."*
+> You must assign yourself permissions before proceeding.
+
+1. Go to **secrets-demo-keyvault** → **Access Control (IAM)** → **+ Add** → **Add role assignment**
+2. Configure:
+   - **Role:** `Key Vault Secrets Officer`
+   - **Assign access to:** User, group, or service principal
+   - **Members:** Select your profile
+3. Click **Review + assign**
+
+> **Key Vault Secrets Officer** — Performs any action on the secrets of a key vault.
+
+### Create the Secret
+
+1. Go to **secrets-demo-keyvault** → Objects → **Secrets**
+2. Click **+ Generate/Import** and configure:
+   - **Upload options:** Manual
+   - **Name:** `key2`
+   - **Secret value:** `secretfromkeyvault`
+3. Click **Create**
+
+---
+
+## Step 5 — Enable Managed Identity on the Container App
+
+> In order for ACA to access Azure Key Vault, it requires permissions via a **Managed Identity**.
+
+1. Go to **ACA** → **keyvault-demo-app** → Security → **Identity**
+2. Set **System Assigned** → **On** → **Save** → **Yes**
+3. Capture the **Object (Principal) ID:**
+   ```
+   dc0cc547-7a85-41bc-a373-defb54eceae1
+   ```
+
+> **Note:** This creates a Service Principal in Entra ID (App Registration) in the background.
+
+### Assign Key Vault Role to Managed Identity
+
+1. Click **Add role assignments** → **+ Add role assignment (Preview)**
+2. Configure:
+   - **Scope:** Key Vault
+   - **Subscription:** Your Subscription ID
+   - **Resource:** `secrets-demo-keyvault`
+   - **Role:** `Key Vault Secrets User`
+3. Click **Save**
+
+> **Key Vault Secrets User** — Able to fetch secrets from the Key Vault service.
+
+---
+
+## Step 6 — Add Key 2 as a Key Vault Reference in ACA Secrets
+
+1. Go to **ACA** → **keyvault-demo-app** → Security → **Secrets** → **+ Add**
+2. Configure:
+   - **Key:** `key2`
+   - **Type:** Key Vault reference
+   - **Managed Identity:** System assigned
+
+### Get the Secret Identifier URL
+
+1. Go to **Key Vault** → **secrets-demo-keyvault** → Objects → Secrets → **key2** → Current Version
+2. Copy the **Secret Identifier:**
+   ```
+   https://secrets-demo-keyvault.vault.usgovcloudapi.net/secrets/key2/79907b2845ea4d32beb1aa4c680a8940
+   ```
+3. Paste into **Key Vault Secret URL** field
+4. Click **Add**
+
+---
+
+## Step 7 — Add Environment Variables to the Container
+
+> **Note:** Secrets creation is complete. To use secrets inside the container, you must map them as environment variables.
+
+1. Go to **Application** → **Containers** → **Edit and Deploy**
+2. Click on the Container Image → **keyvault-demo-app** → **Environment Variables** → **+ Add**
+3. Add the following variables:
+
+| Name | Source | Value |
+|---|---|---|
+| `key1` | Reference a secret | `key1` |
+| `key2` | Reference a secret | `key2` |
+
+4. Click **Save** → **Create**
+
+> **Note:** This step creates a new Revision. The old Revision will be decommissioned automatically.
+
+---
+
+## Step 8 — Test the Application
+
+1. Go to **ACA** → **keyvault-demo-app** → **Overview**
+2. Click on the **Application URL**
+3. Verify the output:
+
+```
+Key1 --> ThisIsaACASecret
+Key2 --> secretfromkeyvault
+```
+
+
+
+
+
+
+
+
+
+
+---
+
+## 4. Authentication and Authorization
 
 📖 Reference: [Microsoft Entra authentication for Container Apps](https://learn.microsoft.com/en-us/azure/container-apps/authentication-entra)
 
@@ -180,7 +368,7 @@ You should be redirected to Microsoft login before accessing the app.
 
 ---
 
-## Section 4: Logging and Observability
+## 5. Logging and Observability
 
 📖 Reference: [Azure Container Apps observability](https://learn.microsoft.com/en-us/azure/container-apps/observability)
 
@@ -193,7 +381,7 @@ Azure Container Apps provides layered observability across two log types and two
 
 ---
 
-### 4.1 Environment System Log Stream
+### 5.1 Environment System Log Stream
 
 Streams real-time infrastructure events (scheduling, scaling, networking) for all apps in the environment.
 
@@ -216,6 +404,7 @@ az containerapp env logs show \
 **Portal:** Container Apps Environments > `my-containerapps-env` > **Monitoring > Log stream**
 
 > **Example system event:**
+>
 > ```json
 > {
 >   "Type": "Normal",
@@ -227,7 +416,7 @@ az containerapp env logs show \
 
 ---
 
-### 4.2 Container App Log Stream
+### 5.2 Container App Log Stream
 
 Streams logs from a specific container app in real time.
 
@@ -257,7 +446,7 @@ Portal: Container App > **Monitoring > Log stream > System**
 
 ---
 
-### 4.3 Container Console (Interactive Shell)
+### 5.3 Container Console (Interactive Shell)
 
 Connect directly into a running container for debugging.
 
@@ -299,7 +488,7 @@ curl -v \
 
 ---
 
-### 4.4 Metrics
+### 5.4 Metrics
 
 📖 Reference: [Azure Container Apps metrics](https://learn.microsoft.com/en-us/azure/container-apps/metrics)
 
@@ -332,5 +521,6 @@ Portal: Container App > **Monitoring > Alerts > Create alert rule**
 | Alert type | Metric alert |
 
 Two alert types are available:
+
 - **Metric alerts** — triggered by Azure Monitor metric thresholds
 - **Log alerts** — triggered by Log Analytics query results

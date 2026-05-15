@@ -9,7 +9,7 @@
 5. Advanced Networking — IP Restrictions
 6. Scalability in Container Apps (replicas)
 7. Environment Variables
-8. Azure Key Vault Integration
+ 
 
 ---
 
@@ -481,6 +481,5 @@ az containerapp ingress access-restriction set \
 5. Click **Environment Variables**
 6. Click **+ Add** to add a new environment variable
 
-### 8. Azure Key Vault Integration
 
-> _Content coming soon — covers referencing Key Vault secrets as environment variables._
+
