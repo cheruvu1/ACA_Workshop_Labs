@@ -11,6 +11,7 @@
 5. Logging and Observability
 
 ---
+# 1. Bring Your Own Virtual Network (VNET)
 
 # Azure Container Apps — Real-World Networking Scenarios
 
