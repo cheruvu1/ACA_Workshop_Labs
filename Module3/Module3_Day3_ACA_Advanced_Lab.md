@@ -18,54 +18,182 @@
 
 By default, Azure Container Apps runs in a managed network. This section walks through connecting your Container App to your own Virtual Network for private networking scenarios.
 
-### Step 1: Create a Virtual Network
+
+
+Azure Container Apps "Real-World" Networking Scenarios
+
+Scenario# 1. Content-web: UI application accessible over the internet,
+   Content-API: Backend API application accessible onlyinside the container app environment.
+
+
+
+# Scenario Content-web: UI application accessible over the internet, Content-API: Backend API application accessible onlyinside the container app environment.
+
+# Content-web will get the public IP 
 
 In the Azure Portal, create a VNet with the following settings:
 
+Azure Resource Details required for this lab: 
+
+# Two VNETs 
+# ACA VNET
 | Setting | Value |
 |---------|-------|
 | Resource Group | `aca_resourcegroup` |
 | Name | `container-apps-vnet` |
-| Subnet 1 | `vm-subnet` — for the test Virtual Machine |
-| Subnet 2 | `infra-subnet` — for the Container App infrastructure |
+| Subnet 1 | `web-subnet` — with NSG rules of Container Apps |
+| Subnet 2 | `app-subnet` — with NSG rules of Container Apps |
 
-### Step 2: Create a Container App with VNet Integration
+# Hub VNET
 
-In the portal, create a new Container App with these settings:
+- A VM for across VNET Connection Demo 
 
-| Setting | Value |
-|---------|-------|
-| Name | `vnet-demo-aca` |
-| Environment (new) | `VNetDemo-managedEnvironment` |
-| Networking > Own VNet | Yes |
-| VNet | `container-apps-vnet` |
-| Subnet | `infra-subnet` |
-| Endpoint type | Internal load balancer |
+- Create 2 Applications Docker images 1) Content Web 2) Content API push to ACR
+- Azure Private Zone: For internal container app DNS Resolution 
 
-After creation:
+### Step 1: Create a Virtual Network
 
-1. Enable Ingress on the app
-2. Go to the **Overview** page and note the internal application URL:
+### Step 2: Create a Content-Web Container App
 
-```
-https://vnet-demo-aca.internal.agreeablebay-776576db.usgovvirginia.azurecontainerapps.us
-```
+Subscription: <Your Subscription>
 
-1. Go to **Resource Groups > Container Apps Environment > VNetDemo-managedEnvironment** and copy the static IP (e.g., `10.0.2.68`)
+RG: ACA-Vnet-Demo-RG
 
-### Step 3: Create a Test VM in the Same VNet
+Name: content-web
 
-To test private connectivity, deploy a VM in the same VNet:
+Deployment Source: Container Image 
 
-| Setting | Value |
-|---------|-------|
-| Image | Windows 11 Pro, version 25H2 - Gen2 |
-| Name | `windows-10-vm` |
-| Username | `azureuser` |
-| Networking > VNet | `container-apps-vnet` |
-| Networking > Subnet | `vm-subnet` |
+Create new environment
 
-After the VM is created, RDP into it and paste the internal ingress URL into the browser to verify connectivity.
+Environment Name: public-env 
+
+Workload profiles Tab:
+
++ Add workload profile: publicwlpro
+
+Size: Dedicated-D4
+
+Autoscaling instance count range: Min: 1 and Max: 3
+
+> Add
+
+Networking Tab: 
+
+Public Network Access: Enable: Allows incoming traffic from the public internet.
+ 
+Use your own virtual network: Yes
+
+Virtual Network: container-app-vnet
+
+subnet: web-subnet
+
+Virtual IP: Select: External: Exposes the hosted apps on an internet-accessible IP address
+
+Click: Create
+
+Next: Container
+
+Image Source: ACR
+
+Registry: myacrlab16284.azurecr.us
+Image: content-web
+Image Tag: 1.0-amd64
+
+
+
+
+Workload profile:  publicwlpro
+
+
+Next: Ingress
+
+Ingress: Enable 
+
+Ingress traffic: Accept traffic from anywhere 
+
+Target Port: 3000
+
+Review + Create 
+
+# Test the Content-Web application
+
+Azure Portal > Container Apps > content-web > Overview Page > Application URL 
+
+Test Speakers & Sessions tabs: Data will be black, because it require Conent API Application service deployment
+
+
+
+
+### Step 3: Create a Content-API Container App
+
+
+Subscription: <Your Subscription>
+
+RG: ACA-Vnet-Demo-RG
+
+Name: content-api
+
+Deployment Source: Container Image 
+
+Container Apps environment: public-env (ContainerAppsRG)
+
+Next: Container >
+
+Registry: myacrlab16284.azurecr.us
+Image: content-api
+Image Tag: 1.0-amd64
+
+Workload profile: publicwlpro
+
+Next: Ingress >
+
+Ingress: Enable the check box
+
+Select the Radio button: Limited to Container Apps Environment 
+
+Target port: 3001
+
+Click: Review + Create
+
+Click: Create 
+
+# Test the Content-API application
+
+Azure Portal > Container Apps > content-api > Overview Page > Application URL 
+
+You will see below message: Since  Content-api is not avaiable to public.
+
+Error 404 - This Container App is stopped or does not exist.
+
+# Connectivity test from Cotent-Web to Content-API 
+
+Go to ACA: content-web > Monitoring > Console > /bin/sh > Connect
+
+# curl https://content-api.internal.braveplant-1a740dc9.usgovvirginia.azurecontainerapps.us/speakers
+
+# curl https://content-api.internal.braveplant-1a740dc9.usgovvirginia.azurecontainerapps.us/sessions
+
+
+# Setup Content-API as an enviornment variable:
+
+Go to ACA: content-web > Application > Containers > Edit and deploy > Container Image > select content-web > Environment variables > 
+
+Name: CONTENT_API_URL
+Source: Manual Entry
+Value: https://content-api.internal.braveplant-1a740dc9.usgovvirginia.azurecontainerapps.us
+
+Save
+
+Create 
+
+It will deploy a new revision.
+
+Review the environment variable: Containers > Environment variables > Based on revision: New revision.
+
+# Test the Content-web application Speakers and Sessions tabs
+
+Go to > Overview > Application URL > Now you see Session and Speaker Data.
+
 
 ---
 
@@ -131,7 +259,7 @@ az group delete --resource-group $RESOURCE_GROUP --yes
 ```
 
  ----
- 
+
  # 3. Azure Key Vault Integration
 
 > Covers referencing Key Vault secrets as environment variables in Azure Container Apps.
