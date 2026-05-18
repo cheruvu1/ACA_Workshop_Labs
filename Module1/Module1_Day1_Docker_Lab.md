@@ -105,11 +105,14 @@ git clone https://github.com/cheruvu1/ACA_Workshop_Labs.git
 
 # 2. Create a Java container
 
-Goto the folder: Module1/SpringBoot-App/spring-boot-web-service
+Goto the folder: Module1/Java-SprintBoot-App/spring-boot-web-service
 
 
 ## Quick test
 mvn spring-boot:run
+
+http://localhost:8080/ContainerApp
+
 
 ## Build and test 
 mvn clean install
@@ -124,9 +127,15 @@ http://localhost:8080/ContainerApp
 cURL
 curl --request GET 'http://localhost:8080/ContainerApp'
 
+## Review Dockerfile (Module1/Java-SprintBoot-App/spring-boot-web-service)
+
+** x86 or Linux OS commands
+
+docker build  -t spring-boot-web-service:1.0 .
+docker images
+docker run -p 8080:8080 spring-boot-web-service:1.0
 
 **ARM (Apple Silicon / ARM-based PC/Mac):**
-
 
 docker build --platform=linux/arm64 -t spring-boot-web-service:1.0-arm64 .
 docker images
@@ -136,9 +145,13 @@ Then open your browser and navigate to:
 
 [http://localhost:8080/ContainerApp](http://localhost:8080/ContainerApp)
 
+# Review Container-BluePrint (Module1/Images/Java-Dockerfile/Container-BluePrint.png)
+
 # 3. Create a .NET container
 
- 
+Goto the folder: Module1/DotNet/ASP-Net-Core-WebApplication/ASP-Net-Core-WebApplication
+
+
 docker build --platform=linux/arm64 -t dotnet-webapplication:1.0-arm64 .
 docker images
 docker run --user root -p 8080:8080 dotnet-webapplication:1.0-arm64
@@ -162,6 +175,8 @@ Then open your browser and navigate to:
 
 
 ### 5 Create the Web/HTML Application Content
+
+# Folder: cd Module1/Web
 
 Create a file named `index.html`:
 
@@ -213,8 +228,8 @@ Then open your browser and navigate to: [http://localhost:8080](http://localhost
 
 ## Optional: Follow below steps to remove a running container
 docker ps (Find the ContainerID)
-docker rm 1d7ccca213b0
 docker stop 1d7ccca213b0
+docker rm 1d7ccca213b0
 
 ---
 
@@ -231,14 +246,18 @@ az acr login --name $ACR_NAME
 
 ```bash
 # Get the ACR login server URL
-ACR_NAME=myacrlab16284
+ACR_NAME=myacrlab17.azurecr.us
 
 ACR_LOGIN_SERVER=$(az acr show -n $ACR_NAME --query "loginServer" -o tsv)
+
+
 
 # Standard tag
 docker tag mycontainerapp:v1 $ACR_LOGIN_SERVER/mycontainerapp:v1
 
 # ARM tag
+docker build --platform=linux/amd64 -t mycontainerapp:1.0-amd64 .
+
 docker tag mycontainerapp:1.0-amd64 $ACR_LOGIN_SERVER/mycontainerapp:1.0-amd64
 
 # Verify images
@@ -248,10 +267,16 @@ docker images
 ### 6.3 Push the Image to ACR
 
 ```bash
+
+# Login to ACR
+az login (if you already executed earlier, you can ignore)
+az acr login --name $ACR_LOGIN_SERVER
+
 # Standard push
 docker push $ACR_LOGIN_SERVER/mycontainerapp:v1
 
 # ARM push
+ 
 docker push $ACR_LOGIN_SERVER/mycontainerapp:1.0-amd64
 
 # Verify the image is in ACR
@@ -263,9 +288,14 @@ az acr repository list --name $ACR_NAME -o table
 Log in to the [Azure Portal](https://portal.azure.com) and navigate to your Container Registry to confirm the image was pushed successfully.
 
 
-7. Push an image to DockerHub
+## 7. Push an image to DockerHub
+
 
 Use this approach when pushing to a public container registry.
+
+http://hub.docker.com
+
+
 
 ```bash
 # 7.1 Build the image
@@ -286,6 +316,17 @@ docker login
 # 7.5 Push to DockerHub
 docker push cheruvu007/mycontainerapp:1.0-amd64
 ```
+
+Log in to the [Docker Hub](https://hub.docker.com) and navigate to your Docker Hub Registry to confirm the image was pushed successfully.
+
+Review Docker Official Images [Docker Images](https://hub.docker.com/search?badges=official)
+
+Review Docker Hardened Images [Docker Hardened Images](https://hub.docker.com/search?badges=hardened)
+
+Review DOD PlatformOne Iron Bank Images, Trusted by the DoD.  [Iron Bank Images](https://p1.dso.mil/iron-bank)
+
+
+
 
 ---
 

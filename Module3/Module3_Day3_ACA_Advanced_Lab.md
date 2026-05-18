@@ -11,6 +11,263 @@
 5. Logging and Observability
 
 ---
+
+# Content Web & Content API — Docker Build & Deployment Guide
+
+This guide covers local development, Docker image builds for ARM64 (local) and AMD64 (Linux/production),
+and pushing images to Azure Container Registry (ACR).
+
+---
+
+## Overview
+
+| Service | Local Port | Description |
+|---|---|---|
+| **Content Web** | `3000` | Frontend web application |
+| **Content API** | `3001` | Backend API serving sessions and speakers data |
+
+---
+
+## Part 1 — Content Web
+
+### 1.1 Run Locally (Without Docker)
+
+Start the Node.js server directly on your machine:
+
+```bash
+node ./server.js &
+```
+
+> The `&` runs the server in the background so your terminal stays free.
+
+Test in your browser:
+
+```
+http://localhost:3000
+```
+
+To stop the Node.js server at any time:
+
+```bash
+killall node
+```
+
+> **Note:** `killall node` removes **all** running Node.js processes on your local machine.
+
+---
+
+### 1.2 Build Docker Image (Basic)
+
+```bash
+docker build -t content-web .
+```
+
+---
+
+### 1.3 Local Testing on ARM Laptop (Apple M1/M2/M3)
+
+Build the image for the ARM64 architecture to match your local chip:
+
+```bash
+docker build --platform=linux/arm64 -t content-web:1.0-arm64 .
+```
+
+Run the container locally:
+
+```bash
+docker run -p 3000:3000 content-web:1.0-arm64
+```
+
+Test in your browser:
+
+```
+http://localhost:3000
+```
+
+---
+
+### 1.4 Push to ACR (Linux AMD64 — Production)
+
+Azure Container Apps runs on **Linux AMD64**, so a separate image must be built for that platform before pushing.
+
+**Step 1 — Build for AMD64:**
+
+```bash
+docker build --platform=linux/amd64 -t content-web:1.0-amd64 .
+```
+
+**Step 2 — Tag the image for ACR:**
+
+```bash
+docker tag content-web:1.0-amd64 myacrlab16284.azurecr.us/content-web:1.0-amd64
+```
+
+**Step 3 — Login to ACR:**
+
+```bash
+az acr login --name myacrlab16284.azurecr.us
+```
+
+**Step 4 — Push the image:**
+
+```bash
+docker push myacrlab16284.azurecr.us/content-web:1.0-amd64
+```
+
+---
+
+## Part 2 — Content API
+
+### 2.1 Run Locally (Without Docker)
+
+Start the Node.js API server directly on your machine:
+
+```bash
+node ./server.js &
+```
+
+Test in your browser:
+
+```
+http://localhost:3001
+```
+
+To stop the Node.js server at any time:
+
+```bash
+killall node
+```
+
+---
+
+### 2.2 Build Docker Image (Basic)
+
+```bash
+docker build -t content-api .
+```
+
+---
+
+### 2.3 Local Testing on ARM Laptop (Apple M1/M2/M3)
+
+Build the image for ARM64 architecture:
+
+```bash
+docker build --platform=linux/arm64 -t content-api:1.0-arm64 .
+```
+
+Run the container locally:
+
+```bash
+docker run -p 3001:3001 content-api:1.0-arm64
+```
+
+Test the API endpoints in your browser or via curl:
+
+```
+http://localhost:3001/sessions
+http://localhost:3001/speakers
+```
+
+---
+
+### 2.4 Push to ACR (Linux AMD64 — Production)
+
+**Step 1 — Build for AMD64:**
+
+```bash
+docker build --platform=linux/amd64 -t content-api:1.0-amd64 .
+```
+
+**Step 2 — Tag the image for ACR:**
+
+```bash
+docker tag content-api:1.0-amd64 myacrlab16284.azurecr.us/content-api:1.0-amd64
+```
+
+**Step 3 — Login to ACR:**
+
+```bash
+az acr login --name myacrlab16284.azurecr.us
+```
+
+**Step 4 — Push the image:**
+
+```bash
+docker push myacrlab16284.azurecr.us/content-api:1.0-amd64
+```
+
+---
+
+## Quick Reference — Full Command Summary
+
+### Content Web
+
+```bash
+# Run locally
+node ./server.js &
+
+# Build (ARM64 - local Mac)
+docker build --platform=linux/arm64 -t content-web:1.0-arm64 .
+docker run -p 3000:3000 content-web:1.0-arm64
+
+# Build & Push (AMD64 - ACR/Production)
+docker build --platform=linux/amd64 -t content-web:1.0-amd64 .
+docker tag content-web:1.0-amd64 myacrlab16284.azurecr.us/content-web:1.0-amd64
+az acr login --name myacrlab16284.azurecr.us
+docker push myacrlab16284.azurecr.us/content-web:1.0-amd64
+
+# Stop local Node server
+killall node
+```
+
+### Content API
+
+```bash
+# Run locally
+node ./server.js &
+
+# Build (ARM64 - local Mac)
+docker build --platform=linux/arm64 -t content-api:1.0-arm64 .
+docker run -p 3001:3001 content-api:1.0-arm64
+
+# Test API endpoints
+# http://localhost:3001/sessions
+# http://localhost:3001/speakers
+
+# Build & Push (AMD64 - ACR/Production)
+docker build --platform=linux/amd64 -t content-api:1.0-amd64 .
+docker tag content-api:1.0-amd64 myacrlab16284.azurecr.us/content-api:1.0-amd64
+az acr login --name myacrlab16284.azurecr.us
+docker push myacrlab16284.azurecr.us/content-api:1.0-amd64
+
+# Stop local Node server
+killall node
+```
+
+---
+
+## Key Concepts
+
+| Term | Explanation |
+|---|---|
+| `--platform=linux/arm64` | Builds image for Apple Silicon (M1/M2/M3) chips |
+| `--platform=linux/amd64` | Builds image for standard Intel/AMD Linux servers used by Azure |
+| `docker tag` | Renames/labels an image to match the ACR repository path before pushing |
+| `az acr login` | Authenticates Docker with your Azure Container Registry |
+| `docker push` | Uploads the tagged image to ACR |
+| `killall node` | Stops all running Node.js processes on your local machine |
+
+---
+
+## Why Two Platforms?
+
+Your **local Mac (ARM64)** and **Azure Linux servers (AMD64)** use different CPU architectures.
+A Docker image built for ARM64 will not run on AMD64 and vice versa.
+This is why two separate builds are needed — one for local testing and one for production deployment.
+
+
+
 # 1. Bring Your Own Virtual Network (VNET)
 
 # Azure Container Apps — Real-World Networking Scenarios
