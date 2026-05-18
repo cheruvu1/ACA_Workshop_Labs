@@ -109,45 +109,67 @@ Goto the folder: Module1/Java-SprintBoot-App/spring-boot-web-service
 
 
 ## Quick test
+
+```bash
 mvn spring-boot:run
 
 http://localhost:8080/ContainerApp
 
+```
+
 
 ## Build and test 
+
+```bash
 mvn clean install
 java -jar target/spring-boot-2-web-service-1.0.2-SNAPSHOT.jar
+```
 
 # Testing 
 Send an HTTP GET request to '/ContainerApp' endpoint using any of the two methods
 
+```bash
 Browser or REST client
 http://localhost:8080/ContainerApp
 
 cURL
 curl --request GET 'http://localhost:8080/ContainerApp'
 
+```
+
+
 ## Review Dockerfile (Module1/Java-SprintBoot-App/spring-boot-web-service)
 
 ** x86 or Linux OS commands
 
+```bash
 docker build  -t spring-boot-web-service:1.0 .
 docker images
 docker run -p 8080:8080 spring-boot-web-service:1.0
 
+```
+
 **ARM (Apple Silicon / ARM-based PC/Mac):**
 
+```bash
 docker build --platform=linux/arm64 -t spring-boot-web-service:1.0-arm64 .
 docker images
 docker run -p 8080:8080 spring-boot-web-service:1.0-arm64
- 
+
+```
+
 Then open your browser and navigate to: 
 
+```bash
 [http://localhost:8080/ContainerApp](http://localhost:8080/ContainerApp)
+
+```
 
 # Review Container-BluePrint (Module1/Images/Java-Dockerfile/Container-BluePrint.png)
 
 # 3. Create a .NET container
+
+```bash
 
 Goto the folder: Module1/DotNet/ASP-Net-Core-WebApplication/ASP-Net-Core-WebApplication
 
@@ -160,8 +182,11 @@ Then open your browser and navigate to:
 
 [http://localhost:8080/](http://localhost:8080/)
 
+```
 
 # 4. Create a Python container
+
+```bash
 
 cd Module1/PythonApp
 
@@ -173,6 +198,8 @@ Then open your browser and navigate to:
 
 [http://localhost:5001](http://localhost:5001)
 
+```
+
 
 ### 5 Create the Web/HTML Application Content
 
@@ -180,7 +207,9 @@ Then open your browser and navigate to:
 
 Create a file named `index.html`:
 
-```html
+```bash
+
+html
 <!DOCTYPE html>
 <html>
   <head>
@@ -192,15 +221,20 @@ Create a file named `index.html`:
     <p>This is a sample app running in Azure Container Apps.</p>
   </body>
 </html>
+
 ```
 
 ### 5.1 Create a Dockerfile
 
-```dockerfile
+# dockerfile
+
+```bash
+
 FROM nginx:alpine
 
 # Copy the static HTML page to Nginx's default directory
 COPY index.html /usr/share/nginx/html/index.html
+
 ```
 
 ### 5.2 Build the Docker Image
@@ -227,9 +261,14 @@ docker run -d -p 8080:80 mycontainerapp:1.0-arm64
 Then open your browser and navigate to: [http://localhost:8080](http://localhost:8080)
 
 ## Optional: Follow below steps to remove a running container
+
+```bash
+
 docker ps (Find the ContainerID)
 docker stop 1d7ccca213b0
 docker rm 1d7ccca213b0
+
+```
 
 ---
 
