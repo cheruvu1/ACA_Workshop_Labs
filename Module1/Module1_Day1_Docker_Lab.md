@@ -180,9 +180,11 @@ docker run --user root -p 8080:8080 dotnet-webapplication:1.0-arm64
  
 Then open your browser and navigate to: 
 
+```
+
 [http://localhost:8080/](http://localhost:8080/)
 
-```
+
 
 # 4. Create a Python container
 
@@ -196,9 +198,11 @@ docker run -p 5001:5000 python-application:1.0-arm64
 
 Then open your browser and navigate to: 
 
+```
+
 [http://localhost:5001](http://localhost:5001)
 
-```
+
 
 
 ### 5 Create the Web/HTML Application Content
