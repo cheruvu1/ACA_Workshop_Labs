@@ -160,10 +160,10 @@ docker run -p 8080:8080 spring-boot-web-service:1.0-arm64
 
 Then open your browser and navigate to: 
 
-```bash
+
 [http://localhost:8080/ContainerApp](http://localhost:8080/ContainerApp)
 
-```
+ 
 
 # Review Container-BluePrint (Module1/Images/Java-Dockerfile/Container-BluePrint.png)
 
