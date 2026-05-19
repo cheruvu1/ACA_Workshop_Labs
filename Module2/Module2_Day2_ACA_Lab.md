@@ -573,8 +573,19 @@ az upgrade
 
 ```bash
 az extension add -n ContainerApp
+ 
 
 ```
+Azure CLI does NOT enable preview extensions by default.
+You must explicitly allow preview installs when required.
+
+```bash
+
+az extension add --name containerapp --upgrade --allow-preview true
+
+```
+
+
 3. Update the extension to ensure you have the latest version.
 
 ```bash
