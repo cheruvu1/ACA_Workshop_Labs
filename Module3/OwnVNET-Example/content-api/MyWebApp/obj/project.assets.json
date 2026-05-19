@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/bharadwaja/MICROSOFT/Mission Critical Projects/DeptOf-Energy/FINAL/aca-lab/001-IntroToKubernetes/Student/Resources/Challenge-01/content-api/MyWebApp/MyWebApp.csproj",
+      "projectUniqueName": "/Users/bharadwaja/Microsoft-2026/ACA_Workshop_Labs/Module3/OwnVNET-Example/content-api/MyWebApp/MyWebApp.csproj",
       "projectName": "MyWebApp",
-      "projectPath": "/Users/bharadwaja/MICROSOFT/Mission Critical Projects/DeptOf-Energy/FINAL/aca-lab/001-IntroToKubernetes/Student/Resources/Challenge-01/content-api/MyWebApp/MyWebApp.csproj",
+      "projectPath": "/Users/bharadwaja/Microsoft-2026/ACA_Workshop_Labs/Module3/OwnVNET-Example/content-api/MyWebApp/MyWebApp.csproj",
       "packagesPath": "/Users/bharadwaja/.nuget/packages/",
-      "outputPath": "/Users/bharadwaja/MICROSOFT/Mission Critical Projects/DeptOf-Energy/FINAL/aca-lab/001-IntroToKubernetes/Student/Resources/Challenge-01/content-api/MyWebApp/obj/",
+      "outputPath": "/Users/bharadwaja/Microsoft-2026/ACA_Workshop_Labs/Module3/OwnVNET-Example/content-api/MyWebApp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/bharadwaja/.nuget/NuGet/NuGet.Config"

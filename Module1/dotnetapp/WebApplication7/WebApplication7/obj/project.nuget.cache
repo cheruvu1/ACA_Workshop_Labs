@@ -1,10 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "o47j2mKWSDLEpAAM12niIBEC49Zx0C2xJdvnFnua8uqbmOnsJG1R7vzp9+f6XSDLagTzD6hIZT5/qfQ2CBxs+g==",
+  "dgSpecHash": "c/ZBO0gLk1I=",
   "success": true,
-  "projectFilePath": "C:\\Users\\bharadwaja\\source\\repos\\Docker\\WebApplication7\\WebApplication7\\WebApplication7.csproj",
+  "projectFilePath": "/Users/bharadwaja/Microsoft-2026/ACA_Workshop_Labs/Module1/dotnetapp/WebApplication7/WebApplication7/WebApplication7.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\bharadwaja\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.15.1\\microsoft.visualstudio.azure.containers.tools.targets.1.15.1.nupkg.sha512"
+    "/Users/bharadwaja/.nuget/packages/microsoft.visualstudio.azure.containers.tools.targets/1.15.1/microsoft.visualstudio.azure.containers.tools.targets.1.15.1.nupkg.sha512",
+    "/Users/bharadwaja/.nuget/packages/microsoft.netcore.app.ref/6.0.36/microsoft.netcore.app.ref.6.0.36.nupkg.sha512",
+    "/Users/bharadwaja/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.36/microsoft.aspnetcore.app.ref.6.0.36.nupkg.sha512",
+    "/Users/bharadwaja/.nuget/packages/microsoft.netcore.app.host.osx-arm64/6.0.36/microsoft.netcore.app.host.osx-arm64.6.0.36.nupkg.sha512"
   ],
   "logs": []
 }

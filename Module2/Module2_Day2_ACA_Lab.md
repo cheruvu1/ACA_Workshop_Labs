@@ -19,10 +19,48 @@
 
 There are two ways to create an Azure Container App. Choose one option below.
 
-**Option 1: Create via Azure CLI (using registry credentials)**
+**Option 1: Create via Azure Portal**
+
+Navigate to the [Azure Portal](https://portal.azure.com) and use the Container Apps creation wizard.
+
+**Option 2: Create via Azure CLI (using registry credentials)**
+
+*Note: *
+Azure Container Apps Environment: 
+- A Container Apps Environment is a secure boundary around one or more container apps and jobs. 
+- The Container Apps runtime manages each environment by handling OS upgrades, scale operations, failover procedures, and resource balancing.
+
+Workload Profiles in Azure Container Apps:
+- A workload profile determines the type and amount of compute and memory resources available to container apps deployed in an Azure Container Apps environment. 
+- You can configure different profiles to fit the different needs of your applications.
+
+1. Consumption Profile: Consumption profiles use a serverless architecture.
+
+2. Dedicated Profile: Dedicated profiles run on reserved compute resources in your own dedicated pool. 
+
+3. Flexible Profile (Preview): The Flexible profile blends the billing and setup simplicity of the Consumption profile with many of the performance characteristics of the Dedicated profile
+
+
+Step1: Azure Container Apps Environment: container-env-19
 
 ```bash
-APP_NAME="my-container-app"
+RESOURCE_GROUP="container-app-rg-19"
+
+ENV_NAME="container-env-19"
+
+APP_NAME="mycontainerapp19"
+
+ACR_LOGIN_SERVER="myacrlab18.azurecr.us"
+
+
+ACR_USER=ACA > Settings > Access keys > Enable Admin User > User Name
+ACR_PASS=password or password2 
+
+ACR_USER="myacrlab18"
+ACR_PASS="zYumLhDbwFUPQx6cyjqYtusiL8CYcGxvki4aYP58Gqw7xJaSwwNvJQQJ99CEAAhseKSEqg7NAAACAZCRW05X"
+
+
+Step2: Deploy the container app 
 
 az containerapp create \
   --name $APP_NAME \
@@ -38,9 +76,6 @@ az containerapp create \
 
 > **Note:** The registry password is stored as a secret (e.g., `myacrlab16284azurecrus-myacrlab16284`). Review it under **Security > Secrets** in the portal.
 
-**Option 2: Create via Azure Portal**
-
-Navigate to the [Azure Portal](https://portal.azure.com) and use the Container Apps creation wizard.
 
 ### 1.2 Verify the Deployment
 
@@ -104,6 +139,8 @@ az containerapp create \
 **Step 2: Enable System-Assigned Identity and grant AcrPull**
 
 In the portal, go to **Security > Identity > System Assigned > Status: ON**, then run:
+
+Capture the object ID: 275dbd33-b4f0-45ef-ae9f-2006f1ef2491
 
 ```bash
 # Get the managed identity's principal ID
@@ -175,6 +212,13 @@ docker push cheruvu007/mycontainerapp:1.0-amd64
 ```
 
 ---
+Azure Container Apps — Aspire Dashboard
+ 
+The Aspire Dashboard provides a developer-centric, live view of the telemetry for all container apps within a Container Apps environment, all in a simple UI interface.
+
+It makes it easier to diagnose issues across the container environment by displaying data of the current session with minimal delay.
+
+---
 
 ## 3. Explore Hosting Options (Ingress Settings)
 
@@ -228,6 +272,9 @@ az containerapp show \
 
 **Test connectivity from another container app:**
 
+Using Portal: ACA > Monitoring > Console > /bin/sh
+curl https://container-app-internal.internal.victoriousbush-05a7d3b0.usgovvirginia.azurecontainerapps.us
+
 ```bash
 # Exec into the mi-container-app container
 az containerapp exec \
@@ -268,6 +315,13 @@ az containerapp ingress disable \
 ### 4.1 Build and Push Version 2
 
 ```bash
+
+cd ACA_Workshop_Labs/Module1/web
+ACR_LOGIN_SERVER=myacrlab18.azurecr.us
+# Login to ACR
+az login (if you already executed earlier, you can ignore)
+az acr login --name $ACR_LOGIN_SERVER
+
 # Build v2
 docker build --platform=linux/amd64 -t mycontainerapp:2.0-amd64 .
 
@@ -293,7 +347,29 @@ az acr repository list --name $ACR_NAME -o table
 
 ### 4.2 Enable Multiple Revisions Mode
 
+*Note : * Check the current revision mode: Application > Revisions and replicas > Choose revision mode.
+
+
 To run both versions simultaneously, switch to multiple revision mode:
+
+*Note:* You need a working V1 Azure Container App should be running
+
+```bash
+
+APP_NAME="my-container-app"
+
+az containerapp create \
+  --name $APP_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --environment $ENV_NAME \
+  --image "$ACR_LOGIN_SERVER/mycontainerapp:1.0-amd64" \
+  --target-port 80 \
+  --ingress external \
+  --registry-server "$ACR_LOGIN_SERVER" \
+  --registry-username $ACR_USER \
+  --registry-password $ACR_PASS
+
+```
 
 ```bash
 az containerapp revision set-mode \
@@ -321,7 +397,7 @@ This creates a new revision running v2 while keeping v1 active.
 az containerapp revision list -n $APP_NAME -g $RESOURCE_GROUP -o table
 ```
 
-### 4.4 Split Traffic Between Revisions
+### 4.4 Canary Deployment Model: Split Traffic Between Revisions
 
 Replace the revision names below with actual values from the list above:
 
@@ -480,6 +556,38 @@ az containerapp ingress access-restriction set \
 4. Select your **Container Image**
 5. Click **Environment Variables**
 6. Click **+ Add** to add a new environment variable
+
+
+# 8.0 Deploy an express container app using the Azure CLI (preview)
+
+*Note* 
+During preview, express is available only in the West Central US and East Asia regions.
+
+1. Before you begin, upgrade the Azure Container Apps CLI extension to the required version.
+
+az upgrade
+
+2. Add the Container Apps extension.
+
+az extension add -n ContainerApp
+
+3. Update the extension to ensure you have the latest version.
+
+az extension update --name containerapp
+
+# Create an express environment
+
+Create a resource group and an express environment. Replace <ENVIRONMENT_NAME> and <RESOURCE_GROUP> with your own values.
+
+az containerapp env create --environment-mode express --name <ENVIRONMENT_NAME> --resource-group <RESOURCE_GROUP> --logs-destination none
+
+# Deploy a container app
+
+Deploy a container image to the express environment.
+
+az containerapp up --image docker.io/nginx --name <APP_NAME> --resource-group <RESOURCE_GROUP>
+
+
 
 
 
