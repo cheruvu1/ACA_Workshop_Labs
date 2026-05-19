@@ -56,8 +56,8 @@ ACR_LOGIN_SERVER="myacrlab18.azurecr.us"
 ACR_USER=ACA > Settings > Access keys > Enable Admin User > User Name
 ACR_PASS=password or password2 
 
-ACR_USER="myacrlab18"
-ACR_PASS="zYumLhDbwFUPQx6cyjqYtusiL8CYcGxvki4aYP58Gqw7xJaSwwNvJQQJ99CEAAhseKSEqg7NAAACAZCRW05X"
+ACR_USER=" "
+ACR_PASS=" "
 
 
 Step2: Deploy the container app 
