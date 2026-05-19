@@ -9,6 +9,8 @@
 5. Advanced Networking — IP Restrictions
 6. Scalability in Container Apps (replicas)
 7. Environment Variables
+8. Deploy an express container app using the Azure CLI (preview)
+9. Review DevSecOps Pipeline 
  
 
 ---
