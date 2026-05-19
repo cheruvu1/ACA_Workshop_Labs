@@ -582,16 +582,20 @@ az extension update --name containerapp
 
 ```
 # Create an express environment
-```bash
+
 Create a resource group and an express environment. Replace <ENVIRONMENT_NAME> and <RESOURCE_GROUP> with your own values.
+
+
+```bash
 
 az containerapp env create --environment-mode express --name <ENVIRONMENT_NAME> --resource-group <RESOURCE_GROUP> --logs-destination none
 
 ```
 # Deploy a container app
 
-```bash
 Deploy a container image to the express environment.
+
+```bash
 
 az containerapp up --image docker.io/nginx --name <APP_NAME> --resource-group <RESOURCE_GROUP>
 
