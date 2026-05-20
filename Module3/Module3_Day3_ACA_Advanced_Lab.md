@@ -568,8 +568,8 @@ az group delete --resource-group $RESOURCE_GROUP --yes
 environment="my-containerapps-env"
 RESOURCE_GROUP="aca_resourcegroup"
 ACR_NAME="myacrlab16284.azurecr.us"
-ACR_USER="myacrlab16284"
-ACR_PASS="7YWoBJ6E0RBllgDCK2yl5F81Rrmro5xsj5tCQqUO0m7asCCRX0zaJQQJ99CEAAhseKSEqg7NAAACAZCRIOB2"
+ACR_USER=" "
+ACR_PASS=" "
 ```
 
 ### Login to Azure and ACR
