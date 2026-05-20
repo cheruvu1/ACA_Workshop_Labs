@@ -18,12 +18,14 @@ spec:
         image: myacrlab16284.azurecr.us/content-web:1.0-amd64
         ports:
         - containerPort: 3000
+        env:
+        - name: CONTENT_API_URL
+          value: "http://content-api:3001"         
   replicas: 3 
   selector:
    matchLabels:
       type: content-web-service
 
-
-
+ 
  
         

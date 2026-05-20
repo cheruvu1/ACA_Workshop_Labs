@@ -8,9 +8,9 @@ metadata:
 spec:
   containers:
     - name: payment-processing-pod
-      image: azurecloud1/employee-producer:1.0-amd64
+      image: myacrlab16284.azurecr.us/content-web:1.0-amd64
       ports:
-        - containerPort: 9000
+        - containerPort: 3000
       envFrom:
         - configMapRef:
             name: payment-processing-config
