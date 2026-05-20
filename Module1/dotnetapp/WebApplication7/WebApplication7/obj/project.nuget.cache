@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "c/ZBO0gLk1I=",
+  "dgSpecHash": "7hzBWOeCZdE=",
   "success": true,
-  "projectFilePath": "/Users/bharadwaja/Microsoft-2026/ACA_Workshop_Labs/Module1/dotnetapp/WebApplication7/WebApplication7/WebApplication7.csproj",
+  "projectFilePath": "/Users/bharadwaja/Microsoft-2026/Mod4-5-AKS-Workshop/ACA_Workshop_Labs/Module1/dotnetapp/WebApplication7/WebApplication7/WebApplication7.csproj",
   "expectedPackageFiles": [
     "/Users/bharadwaja/.nuget/packages/microsoft.visualstudio.azure.containers.tools.targets/1.15.1/microsoft.visualstudio.azure.containers.tools.targets.1.15.1.nupkg.sha512",
     "/Users/bharadwaja/.nuget/packages/microsoft.netcore.app.ref/6.0.36/microsoft.netcore.app.ref.6.0.36.nupkg.sha512",

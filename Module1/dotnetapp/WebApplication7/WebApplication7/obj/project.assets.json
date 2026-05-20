@@ -104,11 +104,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/bharadwaja/Microsoft-2026/ACA_Workshop_Labs/Module1/dotnetapp/WebApplication7/WebApplication7/WebApplication7.csproj",
+      "projectUniqueName": "/Users/bharadwaja/Microsoft-2026/Mod4-5-AKS-Workshop/ACA_Workshop_Labs/Module1/dotnetapp/WebApplication7/WebApplication7/WebApplication7.csproj",
       "projectName": "WebApplication7",
-      "projectPath": "/Users/bharadwaja/Microsoft-2026/ACA_Workshop_Labs/Module1/dotnetapp/WebApplication7/WebApplication7/WebApplication7.csproj",
+      "projectPath": "/Users/bharadwaja/Microsoft-2026/Mod4-5-AKS-Workshop/ACA_Workshop_Labs/Module1/dotnetapp/WebApplication7/WebApplication7/WebApplication7.csproj",
       "packagesPath": "/Users/bharadwaja/.nuget/packages/",
-      "outputPath": "/Users/bharadwaja/Microsoft-2026/ACA_Workshop_Labs/Module1/dotnetapp/WebApplication7/WebApplication7/obj/",
+      "outputPath": "/Users/bharadwaja/Microsoft-2026/Mod4-5-AKS-Workshop/ACA_Workshop_Labs/Module1/dotnetapp/WebApplication7/WebApplication7/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/bharadwaja/.nuget/NuGet/NuGet.Config"

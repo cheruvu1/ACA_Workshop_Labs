@@ -103,11 +103,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/bharadwaja/Microsoft-2026/ACA_Workshop_Labs/Module1/dotnetapp/ASPDotNet-WebApp/ASPDotNet-WebApp/ASPDotNet-WebApp.csproj",
+      "projectUniqueName": "/Users/bharadwaja/Microsoft-2026/Mod4-5-AKS-Workshop/ACA_Workshop_Labs/Module1/dotnetapp/ASPDotNet-WebApp/ASPDotNet-WebApp/ASPDotNet-WebApp.csproj",
       "projectName": "ASPDotNet-WebApp",
-      "projectPath": "/Users/bharadwaja/Microsoft-2026/ACA_Workshop_Labs/Module1/dotnetapp/ASPDotNet-WebApp/ASPDotNet-WebApp/ASPDotNet-WebApp.csproj",
+      "projectPath": "/Users/bharadwaja/Microsoft-2026/Mod4-5-AKS-Workshop/ACA_Workshop_Labs/Module1/dotnetapp/ASPDotNet-WebApp/ASPDotNet-WebApp/ASPDotNet-WebApp.csproj",
       "packagesPath": "/Users/bharadwaja/.nuget/packages/",
-      "outputPath": "/Users/bharadwaja/Microsoft-2026/ACA_Workshop_Labs/Module1/dotnetapp/ASPDotNet-WebApp/ASPDotNet-WebApp/obj/",
+      "outputPath": "/Users/bharadwaja/Microsoft-2026/Mod4-5-AKS-Workshop/ACA_Workshop_Labs/Module1/dotnetapp/ASPDotNet-WebApp/ASPDotNet-WebApp/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/bharadwaja/.nuget/NuGet/NuGet.Config"

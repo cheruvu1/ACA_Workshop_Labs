@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: content-web-pod
+  labels: 
+    app: content-web-label
+    type: content-web-service
+spec:
+  containers:
+    - name: content-web-pod
+      image: myacrlab18.azurecr.us/mycontainerapp:1.0-amd64
+      ports:
+      - containerPort: 3000

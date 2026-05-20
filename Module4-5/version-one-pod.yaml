@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: version-one-pod
+  labels: 
+    app: version-one-label
+    type: version-one-service
+spec:
+  containers:
+    - name: version-one-pod
+      image: myacrlab18.azurecr.us/mycontainerapp:1.0-amd64
+      ports:
+      - containerPort: 80
