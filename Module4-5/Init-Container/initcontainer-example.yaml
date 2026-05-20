@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: example
+  template:
+    metadata:
+      labels:
+        app: example
+    spec:
+      containers:
+      - name: main-container
+        image: your-main-container-image:tag
+        # Add your main container configuration here
+
+      initContainers:
+      - name: init-container
+        image: your-init-container-image:tag
+        # Add your init container configuration here
+        # This can include downloading assets or pre-processing data
+
+
+        

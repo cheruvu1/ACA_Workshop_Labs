@@ -1,0 +1,13 @@
+apiVersion: v1 
+kind: ConfigMap
+metadata:
+  name: payment-processing-config
+data: 
+  PAYPAL_URL: https://paypal-gateway.com
+  PAYPAL_CLIENT_ID: AMZN
+  PAYPAL_SECURE_TOKEN: a419789e-40e4
+  DATABASE_HOST: PlatformOne.DOD.com:7643/ironbankdb
+  DATABASE_USER_NAME: azure
+  DATABASE_PASSWORD: stack
+   
+

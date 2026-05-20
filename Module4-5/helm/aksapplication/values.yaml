@@ -1,0 +1,18 @@
+# Default values for aksapplication.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+ 
+
+# Employee  Producer Container / Pod
+EmployeePodName: helm-employee-producer-pod
+
+EmployeeImageName: azurecloud1/employee-producer:1.0-amd64
+
+containerPort: 8000
+
+## Micro service 2 Values 
+
+
+## Micro service 3  Values 
+
+

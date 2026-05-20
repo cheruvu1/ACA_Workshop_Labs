@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: employee-producer-marketing
+  namespace: marketing
+  labels: 
+    app: employee-producer-label
+    type: employee-data-service
+spec:
+  containers:
+    - name: employee-producer-pod
+      image: azurecloud1/employee-producer:1.0-amd64
+      ports:
+      - containerPort: 8000

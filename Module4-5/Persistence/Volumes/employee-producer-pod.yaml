@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: employee-producer-pod
+  namespace: volume
+  labels: 
+    app: employee-producer-label
+    type: employee-data-service
+spec:
+  containers:
+    - name: employee-producer-pod
+      image: azurecloud1/employee-producer:1.0-amd64
+      ports:
+      - containerPort: 8000
+      volumeMounts:
+        - mountPath: /data
+          name: first-volume
+  volumes:
+    - name: first-volume
+      hostPath:
+         path: /dev 
+         type: Directory
+
+
+

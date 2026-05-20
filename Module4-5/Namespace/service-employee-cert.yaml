@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-cert-pod  
+  namespace: sales
+spec:
+  type: NodePort
+  ports:
+  - port: 9000
+  selector:
+    app: employee-cert-label
