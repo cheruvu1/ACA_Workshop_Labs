@@ -30,6 +30,9 @@ and pushing images to Azure Container Registry (ACR).
 
 ## Part 1 — Content Web
 
+Go to Folder: ACA_Workshop_Labs/Module3/OwnVNET-Example/content-web
+
+
 ### 1.1 Run Locally (Without Docker)
 
 Start the Node.js server directly on your machine:
@@ -117,6 +120,8 @@ docker push myacrlab16284.azurecr.us/content-web:1.0-amd64
 ---
 
 ## Part 2 — Content API
+
+Go to Folder: ACA_Workshop_Labs/Module3/OwnVNET-Example/content-api 
 
 ### 2.1 Run Locally (Without Docker)
 
@@ -293,8 +298,6 @@ By default, Azure Container Apps runs in a managed network. This guide walks thr
 |---|---|
 | Docker Images | `content-web` and `content-api` — built and pushed to ACR |
 | Azure Container Registry | `myacrlab16284.azurecr.us` |
-| Azure Private DNS Zone | For internal Container App DNS resolution |
-| Hub VNET VM | For cross-VNET connection demo |
 
 ---
 
