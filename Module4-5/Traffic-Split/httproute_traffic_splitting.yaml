@@ -1,0 +1,45 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: http-headers
+spec:
+  parentRefs:
+  - name: eg
+  hostnames:
+  - backends.example
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - group: ""
+      kind: Service
+      name: content-web-service
+      port: 3000
+    - group: ""
+      kind: Service1
+      name: service-version-one1
+      port: 80
+    - group: ""
+      kind: Service2
+      name: content-web-service2
+      port: 3000
+    - group: ""
+      kind: Service3
+      name: service-version-one3
+      port: 80
+    - group: ""
+      kind: Service4
+      name: content-web-service4
+      port: 3000
+    - group: ""
+      kind: Service5
+      name: service-version-one5
+      port: 80
+
+## The LB will send the 50% traffic to backend and 50% backend-2 services
+
+
+   

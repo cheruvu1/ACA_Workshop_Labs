@@ -1,0 +1,9 @@
+# gatewayclass.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: nginx  # or "eg" for Envoy Gateway
+spec:
+  controllerName: gateway.nginx.org/nginx-gateway-controller
+  # For Envoy Gateway use: gateway.envoyproxy.io/gatewayclass-controller
+  
