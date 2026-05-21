@@ -11,11 +11,15 @@ spec:
   - Egress
   ingress:
   - from:
+  # Only pods labeled app: backend can send traffic into the frontend.
     - podSelector:
         matchLabels:
           app: backend
   egress:
   - to:
+  # Egress (outgoing traffic)
+  # The frontend can only send traffic to pods labeled app: backend. 
+  # It cannot reach the internet, APIs, DNS, or anything else.
     - podSelector:
         matchLabels:
           app: backend

@@ -1,0 +1,17 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nginx-pod
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      volumeMounts:
+        - mountPath: "/mnt/azure"
+          name: volume
+  volumes:
+    - name: volume
+      persistentVolumeClaim:
+        claimName: my-azurefile-pvc
+
+

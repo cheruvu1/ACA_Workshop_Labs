@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-azurefile-pvc
+spec:
+  accessModes:
+    - ReadWriteMany             # Allows multiple pods to read/write simultaneously
+  storageClassName: azurefile-csi
+  resources:
+    requests:
+      storage: 5Gi

@@ -1,0 +1,10 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: azurefile-csi
+provisioner: file.csi.azure.com # Uses the Azure Files CSI driver
+reclaimPolicy: Delete           # Deletes the share when the PVC is deleted
+allowVolumeExpansion: true
+parameters:
+  skuName: Standard_LRS         # Use Premium_LRS for higher performance
+

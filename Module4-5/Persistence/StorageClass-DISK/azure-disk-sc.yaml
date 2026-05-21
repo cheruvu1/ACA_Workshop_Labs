@@ -1,0 +1,10 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: my-custom-sc
+provisioner: disk.csi.azure.com # Built-in driver for Azure Disks
+parameters:
+  skuName: StandardSSD_LRS      # Options: Standard_LRS, Premium_LRS, etc.
+reclaimPolicy: Delete          # Automatically delete disk when PVC is deleted
+volumeBindingMode: WaitForFirstConsumer # Only create disk when a Pod is ready to use it
+

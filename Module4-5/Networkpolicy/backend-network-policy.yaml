@@ -3,6 +3,7 @@ kind: NetworkPolicy
 metadata:
   name: backend-network-policy
 spec:
+# 1. podSelector: app: backend — this policy applies to any pod labeled app: backend
   podSelector:
     matchLabels:
       app: backend 
@@ -11,11 +12,15 @@ spec:
   - Egress
   ingress:
   - from:
+  # Ingress (incoming traffic) Only pods labeled app: frontend are allowed 
+  # to send traffic to the backend.
     - podSelector:
         matchLabels:
           app: frontend
   egress:
   - to:
+  # Egress (outgoing traffic) The backend can only send traffic to pods 
+  # labeled app: frontend.
     - podSelector:
         matchLabels:
           app: frontend
