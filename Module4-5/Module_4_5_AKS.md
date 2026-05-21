@@ -598,10 +598,13 @@ wget: download timed out
 
 ---------
 
-## Review Other NetworkPolicies: DenyAllEgress, Allow only specific Namespace.
+Review Other NetworkPolicies: DenyAllEgress, Allow only specific Namespace.
+
+---------
 
 
 
+# 8. Ingress with GatewayAPI
 
 ## Getting started with Gateway API
 
